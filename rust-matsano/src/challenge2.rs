@@ -1,5 +1,3 @@
-extern crate rustc_serialize;
-
 use rustc_serialize::hex::FromHex;
 use rustc_serialize::hex::ToHex;
 
