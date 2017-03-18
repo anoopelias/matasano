@@ -1,20 +1,8 @@
-use std::fs::File;
-use std::io::BufReader;
-use std::io::BufRead;
-use rustc_serialize::base64::FromBase64;
-
 use challenge3;
+use utils;
 
 pub fn run() {
-    let file = File::open("../resources/6.txt").unwrap();
-    let buf_file = BufReader::new(&file);
-    let mut text = String::new();
-
-    for line in buf_file.lines() {
-        text.push_str(&line.unwrap());
-    }
-
-    let bytes = text.as_str().from_base64().unwrap();
+    let bytes = utils::from_base64_file("../resources/6.txt");
     let keysize = find_optimum_keysize(&bytes);
     let lines = decrypt(&bytes, &keysize);
 
