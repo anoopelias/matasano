@@ -6,6 +6,9 @@ use std::hash::Hash;
 use std::cmp::Eq;
 use std::fmt::Debug;
 
+use decryptor::Decryptor;
+use decryptor::XorDecryptor;
+
 // Data from http://www.data-compression.com/english.html 
 const ENGLISH_CHAR_FREQ: &'static [(char, f32)] = &[
     ('a', 0.0651738),
@@ -39,20 +42,20 @@ const ENGLISH_CHAR_FREQ: &'static [(char, f32)] = &[
 
 pub fn run() {
     let input = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
-    let (_, string) = decrypt_from_hex(input);
+    let (_, string) = decrypt_from_hex(input, XorDecryptor);
 
     println!("Challenge 3 : {}", string);
 }
 
-pub fn decrypt_from_hex(input: &str) -> (f32, String) {
-   decrypt(&input.from_hex().unwrap())
+pub fn decrypt_from_hex<D: Decryptor>(input: &str, decryptor: D) -> (f32, String) {
+   decrypt(&input.from_hex().unwrap(), decryptor)
 }
 
-pub fn decrypt(input_bytes: &[u8]) -> (f32, String) {
+pub fn decrypt<D: Decryptor>(input_bytes: &[u8], decryptor: D) -> (f32, String) {
 
     (0..255).fold((0f32, String::new()), |state, i| {
         let key_bytes = &vec![i;input_bytes.len()];
-        let new_bytes = xor(input_bytes, key_bytes);
+        let new_bytes = decryptor.decrypt(input_bytes, key_bytes);
         let (high_score, _) = state;
 
         match str::from_utf8(&new_bytes) {
@@ -132,13 +135,6 @@ fn sum_of_values<T>(map: &HashMap<T, f32>) -> f32
     where T: Eq + Hash {
 
     map.iter().fold(0f32, |sum, (_, &freq_per)| sum + freq_per)
-}
-
-fn xor(ls1: &[u8], ls2: &[u8]) -> Vec<u8> {
-    ls1.iter()
-        .zip(ls2)
-        .map(|(byte1, byte2)| byte1 ^ byte2)
-        .collect::<Vec<u8>>()
 }
 
 #[test]

@@ -1,3 +1,4 @@
+use decryptor::XorDecryptor;
 use challenge3;
 use utils;
 
@@ -31,7 +32,7 @@ fn decrypt(bytes: &[u8], keysize: &usize) -> Vec<String> {
             }
         }
 
-        let column_text = challenge3::decrypt(&column).1;
+        let column_text = challenge3::decrypt(&column, XorDecryptor).1;
 
         for (i, c) in column_text.chars().enumerate() {
             lines[i].push(c);
