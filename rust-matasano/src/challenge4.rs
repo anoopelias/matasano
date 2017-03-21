@@ -2,7 +2,7 @@ use std::fs::File;
 use std::io::BufReader;
 use std::io::BufRead;
 
-use decryptor::XorDecryptor;
+use lib::decryptor::XorDecryptor;
 use challenge3;
 
 pub fn run() {

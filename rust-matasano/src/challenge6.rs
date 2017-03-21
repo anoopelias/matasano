@@ -1,6 +1,6 @@
-use decryptor::XorDecryptor;
+use lib::decryptor::XorDecryptor;
+use lib::utils;
 use challenge3;
-use utils;
 
 pub fn run() {
     let bytes = utils::from_base64_file("../resources/6.txt");

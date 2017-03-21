@@ -4,8 +4,7 @@ extern crate crypto;
 use std::env;
 use std::collections::HashMap;
 
-mod utils;
-mod decryptor;
+mod lib;
 
 mod challenge1;
 mod challenge2;
