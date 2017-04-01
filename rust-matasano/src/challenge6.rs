@@ -1,4 +1,4 @@
-use lib::decryptor::XorDecryptor;
+use lib::cryptor::XorDecryptor;
 use lib::utils;
 use challenge3;
 

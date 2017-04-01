@@ -15,6 +15,7 @@ mod challenge6;
 mod challenge7;
 mod challenge8;
 mod challenge9;
+mod challenge10;
 
 fn main() {
     let mut args = env::args();
@@ -59,6 +60,7 @@ fn get_challenges_map() -> HashMap<i32, fn()> {
     challenges_map.insert(7, challenge7::run);
     challenges_map.insert(8, challenge8::run);
     challenges_map.insert(9, challenge9::run);
+    challenges_map.insert(10, challenge10::run);
 
     challenges_map
 }

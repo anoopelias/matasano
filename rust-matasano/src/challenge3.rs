@@ -6,8 +6,8 @@ use std::hash::Hash;
 use std::cmp::Eq;
 use std::fmt::Debug;
 
-use lib::decryptor::Decryptor;
-use lib::decryptor::XorDecryptor;
+use lib::cryptor::Decryptor;
+use lib::cryptor::XorDecryptor;
 
 // Data from http://www.data-compression.com/english.html 
 const ENGLISH_CHAR_FREQ: &'static [(char, f32)] = &[
