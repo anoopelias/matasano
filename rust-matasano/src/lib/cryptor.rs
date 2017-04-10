@@ -90,9 +90,7 @@ pub trait Encryptor {
 
 pub struct XorDecryptor;
 pub struct Aes128EcbDecryptor;
-#[allow(unused)]
 pub struct Aes128EcbEncryptor;
-#[allow(unused)]
 pub struct Aes128CbcEncryptor<'a>(pub &'a [u8]);
 pub struct Aes128CbcDecryptor<'a>(pub &'a [u8]);
 

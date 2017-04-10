@@ -2,24 +2,9 @@ use std::fs::File;
 use std::io::BufReader;
 use std::io::Read;
 
+use lib::oracle::Oracle;
 use lib::random::Random;
 use lib::analyzer;
-use lib::cryptor::Encryptor;
-use lib::cryptor::Aes128EcbEncryptor;
-use lib::cryptor::Aes128CbcEncryptor;
-
-fn encrypt_random(bytes: &[u8], random: &mut Random) -> Vec<u8> {
-    let key = &mut [0;16];
-    let iv = &mut [0;16];
-
-    random.fill_bytes(key);
-    random.fill_bytes(iv);
-
-    match random.rand() & 1 {
-        0 => Aes128EcbEncryptor.encrypt(bytes, key),
-        _ => Aes128CbcEncryptor(iv).encrypt(bytes, key)
-    }
-}
 
 fn to_bytes(s: &str, random: &mut Random) -> Vec<u8> {
     let prefix_len = random.rand_range(&5, &10);
@@ -52,9 +37,10 @@ pub fn run() {
     for _ in 0..100 {
 
         let input_bytes = to_bytes(&input, &mut random);
-        let cipher_bytes = encrypt_random(&input_bytes, &mut random);
+        let mut oracle = Oracle::new(None);
+        let cipher_bytes = oracle.encrypt_random(&input_bytes);
 
-        match analyzer::analyze_ecb(&cipher_bytes, &16) {
+        match analyzer::is_ecb(&cipher_bytes, &16) {
             true => cnt_ecb = cnt_ecb + 1,
             false =>  cnt_cbc = cnt_cbc + 1
         }
