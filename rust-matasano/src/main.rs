@@ -1,6 +1,7 @@
 extern crate rustc_serialize;
 extern crate crypto;
 extern crate rand;
+extern crate regex;
 
 use std::env;
 use std::collections::HashMap;
@@ -19,6 +20,7 @@ mod challenge9;
 mod challenge10;
 mod challenge11;
 mod challenge12;
+mod challenge13;
 
 fn main() {
     let mut args = env::args();
@@ -66,6 +68,7 @@ fn get_challenges_map() -> HashMap<i32, fn()> {
     challenges_map.insert(10, challenge10::run);
     challenges_map.insert(11, challenge11::run);
     challenges_map.insert(12, challenge12::run);
+    challenges_map.insert(13, challenge13::run);
 
     challenges_map
 }

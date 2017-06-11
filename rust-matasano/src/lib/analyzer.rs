@@ -37,10 +37,10 @@ pub fn analyze_ecb_oracle(oracle: &Oracle, keysize: &usize) -> String {
         let base_input = prepend_str + from_utf8(&plain_bytes).unwrap();
         for i in 0..255 {
             let ch = i as u8;
-            let mut input = base_input.clone();
-            input.push(ch as char);
+            let mut input = base_input.clone().into_bytes();
+            input.push(ch);
 
-            let mut cipher_last_char = oracle.encrypt(input.as_bytes());
+            let mut cipher_last_char = oracle.encrypt(&input);
             cipher_last_char.truncate(cipher_len);
 
             if cipher_last_char.iter().eq(cipher_output.iter()) {
