@@ -13,32 +13,55 @@ pub struct Oracle {
     key: Vec<u8>,
     iv: Vec<u8>,
     unknown_bytes: Option<Vec<u8>>,
+    prefix: Option<Vec<u8>>,
 }
 
 impl Oracle {
 
-    pub fn new(unknown_bytes: Option<Vec<u8>>) -> Self {
+    pub fn new() -> Self {
+        Oracle::new_oracle(None, false)
+    }
+
+    pub fn new_with_unknown_bytes(unknown_bytes: Vec<u8>) -> Self {
+        Oracle::new_oracle(Some(unknown_bytes), false)
+    }
+
+    pub fn new_with_random_prefix(unknown_bytes: Vec<u8>) -> Self {
+        Oracle::new_oracle(Some(unknown_bytes), true)
+    }
+
+    fn new_oracle(unknown_bytes: Option<Vec<u8>>, should_prefix: bool) -> Self {
         let mut random = Random::new();
         let key = &mut [0;16];
         let iv = &mut [0;16];
+        let prefix;
+
+        if should_prefix {
+            prefix = Some(random.rand_bytes(&256));
+        } else {
+            prefix = None;
+        }
 
         random.fill_bytes(key);
         random.fill_bytes(iv);
 
         Oracle { random: random, key: key.to_vec(), iv: iv.to_vec(),
-            unknown_bytes: unknown_bytes}
+            unknown_bytes: unknown_bytes, prefix: prefix}
     }
 
     pub fn encrypt(&self, bytes: &[u8]) -> Vec<u8> {
-        match self.unknown_bytes {
-            Some(ref unknown_bytes) => {
-                let mut plain_bytes = Vec::from(bytes);
-                plain_bytes.extend(unknown_bytes.iter().cloned());
-                Aes128EcbEncryptor.encrypt(&plain_bytes, &self.key)
-            },
-            None => 
-                Aes128EcbEncryptor.encrypt(bytes, &self.key),
-        }
+        let blank_slice = Vec::new();
+        let mut plain_bytes = Vec::new();
+
+        let prefix = self.prefix.as_ref().unwrap_or(&blank_slice);
+        let suffix = self.unknown_bytes.as_ref().unwrap_or(&blank_slice);
+
+
+        plain_bytes.extend(prefix);
+        plain_bytes.extend(bytes);
+        plain_bytes.extend(suffix);
+
+        Aes128EcbEncryptor.encrypt(&plain_bytes, &self.key)
     }
 
     pub fn decrypt(&self, bytes: &[u8]) -> Vec<u8> {
@@ -137,7 +160,7 @@ mod tests {
 
     #[test]
     fn test_encrypt_decrypt() {
-        let oracle = Oracle::new(None);
+        let oracle = Oracle::new();
         let cipher_bytes = oracle.encrypt_profile("foo@bar.baz");
         let profile = oracle.decrypt_profile(&cipher_bytes);
         assert_eq!("{\n\temail : 'foo@bar.baz'\n\tuid : '10'\n\trole : 'user'\n}", profile);

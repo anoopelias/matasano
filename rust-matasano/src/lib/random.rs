@@ -41,6 +41,17 @@ impl Random {
     pub fn fill_bytes(&mut self, dest: &mut [u8]) {
         self.rng.fill_bytes(dest);
     }
+
+    pub fn rand_bytes(&mut self, max_len: &i32) -> Vec<u8> {
+        let mut bytes = Vec::new();
+        let len = self.rand_range(&0, max_len);
+
+        for _ in 0..len {
+            bytes.push(self.rand_range(&0, &255) as u8);
+        }
+
+        bytes
+    }
 }
 
 #[cfg(test)]

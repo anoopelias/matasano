@@ -1,7 +1,7 @@
 use lib::oracle::Oracle;
 
 pub fn run() {
-    let oracle = Oracle::new(None);
+    let oracle = Oracle::new();
     let cipher_admin = oracle.encrypt("admin".as_bytes());
 
     // Choose an email id such that the last word of the 
