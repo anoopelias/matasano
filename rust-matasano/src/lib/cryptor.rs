@@ -138,7 +138,9 @@ impl<'a> Decryptor for Aes128CbcDecryptor<'a> {
     fn decrypt(&self, bytes: &[u8], key: &[u8]) -> Vec<u8> {
         let iv = Vec::from(self.0);
 
-        bytes.to_vec()
+        // Dereference operator needed here to unbox the unpad
+        // operation
+        *bytes.to_vec()
             .chunks(16)
             .scan(iv, |prev, chunk| {
                 let cipher_chunk = decrypt(chunk, key, NoPadding).unwrap();
@@ -152,6 +154,7 @@ impl<'a> Decryptor for Aes128CbcDecryptor<'a> {
             .flat_map(|cipher_chunk| cipher_chunk)
             .collect::<Vec<u8>>()
             .pkcs7_unpad()
+            .expect("Padding Error")
 
     }
 }

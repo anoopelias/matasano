@@ -1,6 +1,11 @@
 pub trait Pkcs7Pad {
     fn pkcs7_pad(&self, size: u8) -> Self;
-    fn pkcs7_unpad(&self) -> Self;
+    fn pkcs7_unpad(&self) -> Result<Box<Self>, PaddingError>;
+}
+
+#[derive(Debug)]
+pub enum PaddingError {
+    IncorrectPadding
 }
 
 impl Pkcs7Pad for Vec<u8> {
@@ -9,8 +14,8 @@ impl Pkcs7Pad for Vec<u8> {
         pad(&self, size)
     }
 
-    fn pkcs7_unpad(&self) -> Self {
-        unpad(&self)
+    fn pkcs7_unpad(&self) -> Result<Box<Self>, PaddingError> {
+       unpad(&self).map(|v| Box::new(v))
     }
 }
 
@@ -21,9 +26,10 @@ impl Pkcs7Pad for String {
         String::from_utf8_lossy(&padded_bytes).into_owned()
     }
 
-    fn pkcs7_unpad(&self) -> Self {
-        let unpadded_bytes = unpad(&self.as_bytes());
-        String::from_utf8_lossy(&unpadded_bytes).into_owned()
+    fn pkcs7_unpad(&self) -> Result<Box<Self>, PaddingError> {
+        unpad(&self.as_bytes()).map(|v| {
+            Box::new(String::from_utf8_lossy(&v).into_owned())
+        })
     }
 }
 
@@ -39,7 +45,10 @@ pub fn pad(bytes: &[u8], size: u8) -> Vec<u8> {
     padded_bytes
 }
 
-pub fn unpad(bytes: &[u8]) -> Vec<u8> {
+pub fn unpad(bytes: &[u8]) -> Result<Vec<u8>, PaddingError> {
+
+    validate_padding(bytes)?;
+
     let len = bytes.len() as usize;
     let pad_len = bytes[len - 1];
     let mut unpadded_bytes = bytes.to_vec();
@@ -48,7 +57,20 @@ pub fn unpad(bytes: &[u8]) -> Vec<u8> {
         unpadded_bytes.pop();
     }
 
-    unpadded_bytes
+    Ok(unpadded_bytes)
+}
+
+fn validate_padding(bytes: &[u8]) -> Result<(), PaddingError> {
+    let len = bytes.len() as usize;
+    let pad_len = bytes[len - 1];
+
+    for i in 1..pad_len {
+        if bytes[len - (i as usize) - 1] != pad_len {
+            return Err(PaddingError::IncorrectPadding);
+        }
+    }
+
+    Ok(())
 }
 
 #[cfg(test)]
@@ -116,7 +138,7 @@ mod tests {
         let response = unpad(input);
 
         let expected = &[0, 5, 7];
-        assert_eq!(response.as_slice(), expected);
+        assert_eq!(response.unwrap().as_slice(), expected);
     }
 
     #[test]
@@ -125,17 +147,24 @@ mod tests {
         let response = unpad(input);
 
         let expected = &[0, 5, 7];
-        assert_eq!(response.as_slice(), expected);
+        assert_eq!(response.unwrap().as_slice(), expected);
     }
 
     #[test]
     fn test_unpad_string() {
         let input = String::from("YELLOW_SUBMARINE\x04\x04\x04\x04");
-        let response = input.pkcs7_unpad();
+        let response = input.pkcs7_unpad().unwrap();
 
         let expected = "YELLOW_SUBMARINE";
-        assert_eq!(response, expected);
+        assert_eq!(*response, expected);
     }
+
+    #[test]
+    fn test_unpad_error() {
+        let input = String::from("YELLOW_SUBMARINE\x04\x04\x01\x04");
+        assert!(input.pkcs7_unpad().is_err());
+    }
+
 
 }
 

@@ -46,7 +46,7 @@ impl OracleAnalyzer {
                 Err(AnalyzerError::UnknownError)?;
             }
 
-        from_utf8(&plain_bytes.pkcs7_unpad())
+        from_utf8(&plain_bytes.pkcs7_unpad().expect("Unpad Error"))
             .map(|plain_text| {
                 String::from(plain_text)
             }).map_err(|_| {
