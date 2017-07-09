@@ -37,7 +37,7 @@ pub fn run() {
     for _ in 0..100 {
 
         let input_bytes = to_bytes(&input, &mut random);
-        let mut oracle = Oracle::new();
+        let mut oracle = Oracle::new(None, None);
         let cipher_bytes = oracle.encrypt_random(&input_bytes);
 
         match analyzer::is_ecb(&cipher_bytes, &16) {

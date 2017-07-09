@@ -262,7 +262,7 @@ mod tests {
     #[test]
     fn test_analyze_ecb() {
         let input = "foobar";
-        let oracle = Oracle::new_with_unknown_bytes(input.as_bytes().to_vec());
+        let oracle = Oracle::new(None, Some(input.as_bytes().to_vec()));
         let oracle_analyzer = OracleAnalyzer::new(oracle);
 
         let output = oracle_analyzer.analyze_ecb().unwrap();
@@ -272,7 +272,7 @@ mod tests {
     #[test]
     fn test_analyze_ecb_keysize() {
         let input = "PURPLE SPEEDBOAT";
-        let oracle = Oracle::new_with_unknown_bytes(input.as_bytes().to_vec());
+        let oracle = Oracle::new(None, Some(input.as_bytes().to_vec()));
         let oracle_analyzer = OracleAnalyzer::new(oracle);
 
         let output = oracle_analyzer.analyze_ecb().unwrap();
@@ -282,7 +282,7 @@ mod tests {
     #[test]
     fn test_analyze_ecb_less_than_keysize() {
         let input = "PURPLE SPEEDBOA";
-        let oracle = Oracle::new_with_unknown_bytes(input.as_bytes().to_vec());
+        let oracle = Oracle::new(None, Some(input.as_bytes().to_vec()));
         let oracle_analyzer = OracleAnalyzer::new(oracle);
 
         let output = oracle_analyzer.analyze_ecb().unwrap();

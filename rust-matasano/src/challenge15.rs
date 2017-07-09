@@ -16,7 +16,7 @@ pub fn run() {
     }).collect::<Vec<String>>()
     .join("\n");
 
-    print!("Challenge 15: ");
+    print!("Challenge 15 : ");
     print!("{}", output);
     println!("");
 

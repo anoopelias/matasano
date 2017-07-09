@@ -9,7 +9,7 @@ pub fn run() {
         &"YnkK";
 
     let input_bytes = input.as_str().from_base64().unwrap();
-    let oracle = Oracle::new_with_random_prefix(input_bytes);
+    let oracle = Oracle::random_prefix(Some(input_bytes));
     let oracle_analyzer = OracleAnalyzer::new(oracle);
 
     let plain_text = oracle_analyzer.analyze_ecb()
