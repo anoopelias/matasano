@@ -1,4 +1,4 @@
-use lib::pkcs7::Pkcs7Pad;
+use libs::pkcs7::Pkcs7Pad;
 
 pub fn run() {
     let inputs = vec![

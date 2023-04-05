@@ -1,7 +1,7 @@
 use rand::Rng;
 use rand::os::OsRng;
 
-use lib::utils;
+use libs::utils;
 
 pub struct Random {
     rng: Box<Rng>

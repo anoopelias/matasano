@@ -1,6 +1,6 @@
-use lib::utils;
-use lib::cryptor::Decryptor;
-use lib::cryptor::Aes128CbcDecryptor;
+use libs::utils;
+use libs::cryptor::Decryptor;
+use libs::cryptor::Aes128CbcDecryptor;
 
 pub fn run() {
     let bytes = utils::from_base64_file("../resources/10.txt");

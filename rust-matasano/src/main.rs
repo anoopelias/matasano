@@ -6,7 +6,7 @@ extern crate regex;
 use std::env;
 use std::collections::HashMap;
 
-mod lib;
+mod libs;
 
 mod challenge1;
 mod challenge2;

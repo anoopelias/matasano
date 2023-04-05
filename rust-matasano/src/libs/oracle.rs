@@ -1,10 +1,10 @@
-use lib::random::Random;
-use lib::cryptor::Encryptor;
-use lib::cryptor::Decryptor;
-use lib::cryptor::Aes128EcbEncryptor;
-use lib::cryptor::Aes128EcbDecryptor;
-use lib::cryptor::Aes128CbcEncryptor;
-use lib::cryptor::Aes128CbcDecryptor;
+use libs::random::Random;
+use libs::cryptor::Encryptor;
+use libs::cryptor::Decryptor;
+use libs::cryptor::Aes128EcbEncryptor;
+use libs::cryptor::Aes128EcbDecryptor;
+use libs::cryptor::Aes128CbcEncryptor;
+use libs::cryptor::Aes128CbcDecryptor;
 
 pub struct Oracle {
     random: Random,

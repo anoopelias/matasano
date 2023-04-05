@@ -1,7 +1,7 @@
 use std::str::from_utf8;
 
-use lib::pkcs7::Pkcs7Pad;
-use lib::oracle::Oracle;
+use libs::pkcs7::Pkcs7Pad;
+use libs::oracle::Oracle;
 
 pub struct OracleAnalyzer {
     oracle: Oracle,

@@ -1,4 +1,4 @@
-use lib::oracle::Oracle;
+use libs::oracle::Oracle;
 
 use std::str::from_utf8;
 use regex::Regex;

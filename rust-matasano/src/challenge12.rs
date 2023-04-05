@@ -1,6 +1,6 @@
 use rustc_serialize::base64::FromBase64;
-use lib::oracle::Oracle;
-use lib::analyzer::OracleAnalyzer;
+use libs::oracle::Oracle;
+use libs::analyzer::OracleAnalyzer;
 
 pub fn run() {
     let input = String::from("Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd24gc28gbXkg") +

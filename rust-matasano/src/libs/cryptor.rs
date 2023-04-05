@@ -6,7 +6,7 @@ use crypto::blockmodes::{ PkcsPadding, NoPadding, PaddingProcessor};
 use crypto::symmetriccipher;
 use crypto::symmetriccipher::SymmetricCipherError;
 
-use lib::pkcs7::Pkcs7Pad;
+use libs::pkcs7::Pkcs7Pad;
 
 trait CryptHandler {
     fn crypt(&mut self, read_buffer: &mut RefReadBuffer,

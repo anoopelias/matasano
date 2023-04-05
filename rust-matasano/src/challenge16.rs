@@ -1,4 +1,4 @@
-use lib::oracle::Oracle;
+use libs::oracle::Oracle;
 
 pub fn run() {
 

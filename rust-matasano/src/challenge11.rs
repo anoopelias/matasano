@@ -2,9 +2,9 @@ use std::fs::File;
 use std::io::BufReader;
 use std::io::Read;
 
-use lib::oracle::Oracle;
-use lib::random::Random;
-use lib::analyzer;
+use libs::oracle::Oracle;
+use libs::random::Random;
+use libs::analyzer;
 
 fn to_bytes(s: &str, random: &mut Random) -> Vec<u8> {
     let prefix_len = random.rand_range(&5, &10);
