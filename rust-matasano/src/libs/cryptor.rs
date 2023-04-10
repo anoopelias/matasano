@@ -37,8 +37,8 @@ fn crypt<C: CryptHandler>(bytes: &[u8], mut crypt_handler: C)
 
     let mut final_result = Vec::<u8>::new();
     let mut buffer = [0; 4096];
-    let mut read_buffer = &mut RefReadBuffer::new(bytes);
-    let mut write_buffer = &mut RefWriteBuffer::new(&mut buffer);
+    let read_buffer = &mut RefReadBuffer::new(bytes);
+    let write_buffer = &mut RefWriteBuffer::new(&mut buffer);
 
     loop {
         let result = crypt_handler.crypt(read_buffer, write_buffer)?;
