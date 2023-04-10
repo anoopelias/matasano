@@ -41,7 +41,7 @@ fn crypt<C: CryptHandler>(bytes: &[u8], mut crypt_handler: C)
     let mut write_buffer = &mut RefWriteBuffer::new(&mut buffer);
 
     loop {
-        let result = try!(crypt_handler.crypt(read_buffer, write_buffer));
+        let result = crypt_handler.crypt(read_buffer, write_buffer)?;
         final_result.extend(write_buffer
             .take_read_buffer()
             .take_remaining()
