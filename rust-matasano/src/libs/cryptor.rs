@@ -14,7 +14,7 @@ trait CryptHandler {
         -> Result<BufferResult, SymmetricCipherError>;
 }
 
-impl CryptHandler for Box<symmetriccipher::Encryptor> {
+impl CryptHandler for Box<dyn symmetriccipher::Encryptor> {
     fn crypt(&mut self, read_buffer: &mut RefReadBuffer,
          write_buffer: &mut RefWriteBuffer)
         -> Result<BufferResult, SymmetricCipherError> {
@@ -23,7 +23,7 @@ impl CryptHandler for Box<symmetriccipher::Encryptor> {
     }
 }
 
-impl CryptHandler for Box<symmetriccipher::Decryptor> {
+impl CryptHandler for Box<dyn symmetriccipher::Decryptor> {
     fn crypt(&mut self, read_buffer: &mut RefReadBuffer,
          write_buffer: &mut RefWriteBuffer)
         -> Result<BufferResult, SymmetricCipherError> {

@@ -4,7 +4,7 @@ use rand::os::OsRng;
 use libs::utils;
 
 pub struct Random {
-    rng: Box<Rng>
+    rng: Box<dyn Rng>
 }
 
 impl Random {
